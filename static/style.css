@@ -1,0 +1,369 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+    text-shadow: 1px 1px 2px black;
+}
+
+.page-login {
+  font-family: Arial, sans-serif;
+  background-image: url('Plan de travail 1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form h1 {
+  margin-bottom: 20px;
+}
+
+.login-form input {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.login-form button {
+  width: 95%;
+  padding: 10px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: darkgreen;
+}
+
+.password-container {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+}
+
+.password-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+}
+
+.toggle-password {
+  position: relative;
+  left: 180px;
+  top: -35px;
+  background-color: transparent;
+  transform: translateY(-20%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 16px;
+  color: #32cd32;
+  opacity: 0.3;
+}
+
+.flash-messages ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  color: red;
+  font-weight: bold;
+}
+
+.page-resultats {
+  font-family: Arial, sans-serif;
+  background-image: url('Plan de travail 1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultats-container {
+  background-color: rgba(255,255,255,0.95);
+  padding: 200px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.resultats-container h1 {
+  margin-bottom: 20px;
+}
+
+.liste-resultats {
+  list-style-type: none;
+  padding: 0;
+}
+
+.liste-resultats li {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.liste-resultats a {
+  color: green;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.liste-resultats a:hover {
+  text-decoration: underline;
+}
+
+.message-vide {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.retour-accueil {
+  margin-top: 30px;
+}
+
+.btn-retour {
+  text-decoration: none;
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+}
+
+.btn-retour:hover {
+  background-color: darkgreen;
+}
+
+
+.page-categorie {
+  font-family: Arial, sans-serif;
+  background-image: url('Plan de travail 1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding-top: 50px;
+}
+
+.conteneur {
+  background-color: rgba(255,255,255,0.95);
+  padding: 200px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 700px;
+  margin-top: 48px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.contenu-interne {
+  padding: 0; /* aucun padding */
+  margin: 0;
+}
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.btn-retour {
+  background-color: green;
+  color: white;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.btn-retour:hover {
+  background-color: darkgreen;
+}
+
+.admin-barre a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.titre-categorie {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.liste-documents {
+  list-style-type: none;
+  padding: 0;
+}
+
+.liste-documents li {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.liste-documents a {
+  color: green;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.liste-documents a:hover {
+  text-decoration: underline;
+}
+
+.message-vide {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+
+.page-admin {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  padding: 30px 0;
+}
+
+.admin-container {
+  max-width: 900px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.navigation-admin {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+h1, h2 {
+  margin-top: 20px;
+}
+
+.alert-message {
+  background-color: #e3f7e3;
+  border-left: 4px solid green;
+  padding: 10px;
+  margin-bottom: 20px;
+  color: #155724;
+}
+
+.bloc-categorie {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+}
+
+.bloc-categorie h3 {
+  margin-top: 0;
+}
+
+.liste-docs {
+  list-style: none;
+  padding-left: 0;
+}
+
+.liste-docs li {
+  margin-bottom: 10px;
+}
+
+.inline-form {
+  display: inline;
+}
+
+.btn-supprimer, .btn-supprimer-cat {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.btn-retour {
+  background-color: green;
+  color: white;
+  padding: 6px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn-retour:hover {
+  background-color: darkgreen;
+}
+
+.texte-vide {
+  color: gray;
+  font-style: italic;
+}
+
+.form-admin input,
+.form-admin select {
+  margin: 8px 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-admin button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.form-admin button:hover {
+  background-color: #218838;
+}
+
+.btn-reset {
+  margin-top: 30px;
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-reset:hover {
+  background-color: darkred;
+}

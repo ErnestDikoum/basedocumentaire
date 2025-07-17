@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page-resultats">
+
+    <div class="resultats-container">
+        <h1>Résultats de la recherche</h1>
+
+        {% if results %}
+            <ul class="liste-resultats">
+                {% for doc in results %}
+                    <li>
+                        <strong>{{ doc.titre }}</strong><br>
+                        <a href="{{ url_for('uploaded_file', filename=doc.fichier_nom) }}" target="_blank">📄 Afficher le document</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="message-vide">❌ Aucun document trouvé pour votre recherche.</p>
+        {% endif %}
+
+        <div class="retour-accueil">
+            <a href="{{ url_for('index') }}" class="btn-retour">← Retour à l'accueil</a>
+        </div>
+    </div>
+
+</body>
+</html>

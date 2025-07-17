@@ -1,0 +1,39 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Base documentaire{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="barre">
+        <div class="rechercher">
+        <form method="GET" action="/">
+            <input type="text" name="q" placeholder="Rechercher...">
+            <button type="submit">🔍</button>
+        </form>
+        </div>
+        <div class="connex">
+        {% if session.get('is_admin') %}
+            <p>Bonjour {{ session.username }} — <a href="{{ url_for('admin') }}">Accéder à l'administration</a> | <a href="{{ url_for('logout') }}">Déconnexion</a></p>
+        {% else %}
+            <p><a href="{{ url_for('login') }}">Se connecter (administrateur)</a></p>
+        {% endif %}
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>{% for msg in messages %}<li>{{ msg }}</li>{% endfor %}</ul>
+            {% endif %}
+        {% endwith %}
+        
+    </div>
+  
+
+  <div class="contenu">
+    {% block content %}{% endblock %}
+  </div>
+
+</body>
+</html>
