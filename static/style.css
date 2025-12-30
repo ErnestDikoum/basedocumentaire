@@ -1,369 +1,284 @@
-body {
-    font-family: Arial, sans-serif;
+/* =============================================
+   1. BASES & TYPOGRAPHIE
+   ============================================= */
+   body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #333;
 }
 
-h1, h2 {
-    text-shadow: 1px 1px 2px black;
+.contenu {
+    padding: 20px 0;
+    width: 100%;
+    flex: 1 0 auto;
 }
 
-.page-login {
-  font-family: Arial, sans-serif;
-  background-image: url('Plan de travail 1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Effet texte uniquement sur certaines pages */
+.page-home h1,
+.page-home h2,
+.navbar-brand {
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+/* =============================================
+   2. NAVBAR & BARRE ADMIN
+   ============================================= */
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* Fond translucide */
+.bg-light-transparent {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+}
+
+/* --- BARRE ADMIN --- */
+.admin-top-bar {
+    height: 55px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+
+.admin-top-bar .container-fluid {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Texte défilant */
+.scrolling-text-container {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.scrolling-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 18s linear infinite;
+    font-weight: 600;
+}
+
+@keyframes scroll-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+}
+
+/* Bloc admin (dropdown) */
+.admin-info-block {
+    flex-shrink: 0;
+    position: relative;
+    background: white;
+    pointer-events: auto;
+    z-index: 1100;
+}
+
+.admin-info-block .dropdown-menu {
+    position: absolute;
+    z-index: 1200;
+    margin-top: 10px;
+}
+
+/* Supprimer la flèche UNIQUEMENT ici */
+.admin-info-block .dropdown-toggle::after {
+    display: none;
+}
+
+/* Dégradé visuel */
+.admin-info-block::before {
+    content: "";
+    position: absolute;
+    left: -25px;
+    top: 0;
+    width: 25px;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0), white);
+    pointer-events: none;
+}
+
+/* =============================================
+   3. CONTENEURS & PAGES
+   ============================================= */
+.login-form,
+.resultats-container,
+.conteneur,
+.admin-container {
+    background-color: rgba(255, 255, 255, 0.96);
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    margin: 20px auto;
 }
 
 .login-form {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
+    padding: 40px 30px;
+    max-width: 400px;
+    text-align: center;
 }
 
-.login-form h1 {
-  margin-bottom: 20px;
-}
-
-.login-form input {
-  width: 90%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.login-form button {
-  width: 95%;
-  padding: 10px;
-  background-color: green;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.login-form button:hover {
-  background-color: darkgreen;
-}
-
-.password-container {
-  width: 90%;
-  padding: 10px;
-  margin: 8px 0;
-}
-
-.password-container input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-}
-
-.toggle-password {
-  position: relative;
-  left: 180px;
-  top: -35px;
-  background-color: transparent;
-  transform: translateY(-20%);
-  cursor: pointer;
-  user-select: none;
-  font-size: 16px;
-  color: #32cd32;
-  opacity: 0.3;
-}
-
-.flash-messages ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-  color: red;
-  font-weight: bold;
-}
-
-.page-resultats {
-  font-family: Arial, sans-serif;
-  background-image: url('Plan de travail 1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  padding: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+.conteneur,
 .resultats-container {
-  background-color: rgba(255,255,255,0.95);
-  padding: 200px;
-  border-radius: 10px;
-  max-width: 600px;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  text-align: center;
-}
-
-.resultats-container h1 {
-  margin-bottom: 20px;
-}
-
-.liste-resultats {
-  list-style-type: none;
-  padding: 0;
-}
-
-.liste-resultats li {
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.liste-resultats a {
-  color: green;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.liste-resultats a:hover {
-  text-decoration: underline;
-}
-
-.message-vide {
-  color: red;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.retour-accueil {
-  margin-top: 30px;
-}
-
-.btn-retour {
-  text-decoration: none;
-  background-color: green;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-}
-
-.btn-retour:hover {
-  background-color: darkgreen;
-}
-
-
-.page-categorie {
-  font-family: Arial, sans-serif;
-  background-image: url('Plan de travail 1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  padding-top: 50px;
-}
-
-.conteneur {
-  background-color: rgba(255,255,255,0.95);
-  padding: 200px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 700px;
-  margin-top: 48px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.contenu-interne {
-  padding: 0; /* aucun padding */
-  margin: 0;
-}
-.navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.btn-retour {
-  background-color: green;
-  color: white;
-  padding: 8px 15px;
-  text-decoration: none;
-  border-radius: 6px;
-}
-
-.btn-retour:hover {
-  background-color: darkgreen;
-}
-
-.admin-barre a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  margin-left: 10px;
-}
-
-.titre-categorie {
-  font-size: 28px;
-  margin-bottom: 10px;
-}
-
-.liste-documents {
-  list-style-type: none;
-  padding: 0;
-}
-
-.liste-documents li {
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.liste-documents a {
-  color: green;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.liste-documents a:hover {
-  text-decoration: underline;
-}
-
-.message-vide {
-  color: red;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-
-.page-admin {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  padding: 30px 0;
+    padding: 40px;
+    max-width: 900px;
+    width: 95%;
 }
 
 .admin-container {
-  max-width: 900px;
-  margin: auto;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 1140px;
+    padding: 30px;
 }
 
-.navigation-admin {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+/* =============================================
+   4. COMPOSANTS
+   ============================================= */
+
+/* Bouton SUCCESS custom (ne touche pas BS5) */
+.btn-success-custom {
+    background-color: #28a745;
+    border: none;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
-h1, h2 {
-  margin-top: 20px;
+.btn-success-custom:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
 }
 
-.alert-message {
-  background-color: #e3f7e3;
-  border-left: 4px solid green;
-  padding: 10px;
-  margin-bottom: 20px;
-  color: #155724;
+@media (min-width: 768px) {
+    .btn-afficher-fixe {
+        width: 110px;
+        justify-content: center;
+    }
 }
 
-.bloc-categorie {
-  border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  background-color: #fafafa;
+/* Cartes catégories */
+.category-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-.bloc-categorie h3 {
-  margin-top: 0;
+.category-card:hover {
+    transform: translateY(-9px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
 }
 
-.liste-docs {
-  list-style: none;
-  padding-left: 0;
+/* Icône ronde */
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
 }
 
-.liste-docs li {
-  margin-bottom: 10px;
+/* =============================================
+   5. FOOTER
+   ============================================= */
+.site-footer {
+    background-color: #fff;
+    padding: 30px 0;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
 }
 
-.inline-form {
-  display: inline;
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background-color: #f8f9fa;
+    color: #555;
+    border-radius: 50%;
+    margin: 0 5px;
+    transition: all 0.3s ease;
 }
 
-.btn-supprimer, .btn-supprimer-cat {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  margin-left: 10px;
+.social-icons a:hover {
+    background-color: #28a745;
+    color: #fff;
 }
 
-.btn-retour {
-  background-color: green;
-  color: white;
-  padding: 6px 12px;
-  text-decoration: none;
-  border-radius: 5px;
+/* =============================================
+   6. RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) {
+    .admin-top-bar .container-fluid {
+        padding: 5px 15px;
+    }
+
+    .scrolling-text {
+        animation-duration: 12s;
+        font-size: 0.85rem;
+    }
+
+    .conteneur,
+    .resultats-container,
+    .admin-container {
+        padding: 20px;
+        width: 96%;
+    }
 }
 
-.btn-retour:hover {
-  background-color: darkgreen;
+@media (max-width: 576px) {
+    .list-group-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-afficher-fixe {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
 }
 
-.texte-vide {
-  color: gray;
-  font-style: italic;
+/* =============================================
+   7. CHAMPS MOT DE PASSE
+   ============================================= */
+.password-container {
+    position: relative;
+    width: 100%;
 }
 
-.form-admin input,
-.form-admin select {
-  margin: 8px 0;
-  padding: 8px;
-  width: 100%;
-  max-width: 400px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.password-container .form-control {
+    padding-right: 45px;
 }
 
-.form-admin button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #28a745;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
-.form-admin button:hover {
-  background-color: #218838;
-}
-
-.btn-reset {
-  margin-top: 30px;
-  background-color: red;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-reset:hover {
-  background-color: darkred;
+.toggle-password:hover {
+    color: #218838;
 }

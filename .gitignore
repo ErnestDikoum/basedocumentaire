@@ -1,0 +1,80 @@
+# =========================
+# Python / Flask
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+ENV/
+
+# =========================
+# Flask specific
+# =========================
+instance/
+.webassets-cache/
+
+# =========================
+# Uploads (fichiers utilisateurs)
+# =========================
+uploads/
+media/
+static/uploads/
+
+# Garder un fichier vide pour créer le dossier
+!uploads/.gitkeep
+!static/uploads/.gitkeep
+
+# =========================
+# Base de données
+# =========================
+*.sqlite
+*.sqlite3
+*.db
+
+# =========================
+# Migrations
+# =========================
+migrations/__pycache__/
+
+# =========================
+# Logs & debug
+# =========================
+*.log
+logs/
+flask.log
+
+# =========================
+# Config & secrets
+# =========================
+.env
+.env.*
+config.py
+instance/config.py
+
+# =========================
+# OS / IDE
+# =========================
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# =========================
+# Tests / coverage
+# =========================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# =========================
+# Node / Frontend (si utilisé)
+# =========================
+node_modules/
+dist/
+build/

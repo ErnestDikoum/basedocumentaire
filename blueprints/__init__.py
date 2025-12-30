@@ -1,0 +1,1 @@
+"""Module des blueprints Flask"""

@@ -1,43 +1,93 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Administration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page-admin">
+{% extends "base.html" %}
 
-    <div class="admin-container">
-        <div class="navigation-admin">
-            <a href="{{ url_for('index') }}" class="btn-retour">← Retour à l'accueil</a>
-            {% if session.get('is_admin') %}
-                <span>Connecté : {{ session.username }} | 
-                    <a href="{{ url_for('logout') }}">Déconnexion</a>
-                </span>
-            {% else %}
-                <a href="{{ url_for('login') }}">Connexion administrateur</a>
-            {% endif %}
+{% block title %}Administration - Base Documentaire{% endblock %}
+
+{% block body_class %}page-admin{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5 px-2">
+    <div class="admin-container w-100">
+
+        <!-- Header -->
+        <div class="d-flex flex-column flex-md-row
+                    justify-content-between align-items-start align-items-md-center mb-4">
+            <h1 class="h2 mb-2 mb-md-0">📁 Administration</h1>
+            <a href="{{ url_for('documents.index') }}"
+               class="btn btn-outline-secondary btn-sm shadow-sm">
+                <i class="fas fa-home me-1"></i>
+                Accueil
+            </a>
         </div>
 
-        <h1>📁 Interface d'administration</h1>
-        <p>Gérez ici vos catégories et vos documents de la base.</p>
+        <p class="text-muted small">
+            Gérez ici vos catégories et vos documents de la base.
+        </p>
         <hr>
 
-        <h2>📂 Catégories & Documents</h2>
-        <p> Modifiez le nom du document ici</p>
-        <form action="{{ url_for('edit_document', id=document.id) }}" method="post">
-            <input type="text" name="titre" value="{{ document.titre }}" required>
-            <select name="categorie_id" required>
-                {% for cat in categories %}
-                    <option value="{{ cat.id }}" {% if cat.id == document.categorie_id %}selected{% endif %}>
-                        {{ cat.nom }}
-                    </option>
-                {% endfor %}
-            </select>
+        <!-- Card -->
+        <div class="card shadow-sm mt-4 border-0">
+            <div class="card-body p-3 p-md-4">
 
-            <button type="submit">Modifier</button>
-        </form>
+                <h2 class="h4 mb-3">
+                    <i class="fas fa-edit text-success me-2"></i>
+                    Modifier le document
+                </h2>
+
+                <p class="small text-secondary mb-4">
+                    Modifiez le titre ou changez la catégorie du document ci-dessous :
+                </p>
+
+                <form action="{{ url_for('admin.edit_document', id=document.id) }}"
+                      method="post"
+                      class="form-admin">
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <!-- Titre -->
+                    <div class="mb-3">
+                        <label for="titre" class="form-label fw-bold small">
+                            Titre du document :
+                        </label>
+                        <input type="text"
+                               name="titre"
+                               id="titre"
+                               value="{{ document.titre }}"
+                               class="form-control"
+                               required
+                               placeholder="Entrez le titre du document">
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="mb-4">
+                        <label for="categorie_id" class="form-label fw-bold small">
+                            Catégorie :
+                        </label>
+                        <select name="categorie_id"
+                                id="categorie_id"
+                                class="form-select"
+                                required>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}"
+                                    {% if cat.id == document.categorie_id %}selected{% endif %}>
+                                    {{ cat.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Bouton -->
+                    <div class="text-center text-md-start">
+                        <button type="submit"
+                                class="btn btn-success px-5 py-2 shadow-sm fw-bold w-100 w-md-auto">
+                            <i class="fas fa-save me-2"></i>
+                            Enregistrer
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
 
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

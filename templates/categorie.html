@@ -1,46 +1,70 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ categorie.nom }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page-categorie">
+{% extends "base.html" %}
 
-    <div class="conteneur">
+{% block title %}{{ categorie.nom }} - Base Documentaire{% endblock %}
+
+{% block body_class %}page-categorie{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center px-2">
+    <div class="conteneur shadow-lg w-100 mb-5">
         <div class="contenu-interne">
-            <div class="navigation">
-                <a href="{{ url_for('index') }}" class="btn-retour">← Retour à l'accueil</a>
 
-                <div class="admin-barre">
-                    {% if session.get('is_admin') %}
-                        <span>Connecté : {{ session.username }} | 
-                            <a href="{{ url_for('admin') }}">Administration</a> | 
-                            <a href="{{ url_for('logout') }}">Déconnexion</a>
-                        </span>
-                    {% else %}
-                        <a href="{{ url_for('login') }}">Connexion administrateur</a>
-                    {% endif %}
-                </div>
+            <!-- Navigation -->
+            <div class="navigation mb-4">
+                <a href="{{ url_for('documents.index') }}"
+                   class="btn btn-outline-success btn-sm shadow-sm">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Accueil
+                </a>
             </div>
 
-            <h1 class="titre-categorie">{{ categorie.nom }}</h1>
-            <h2>Sommaire </h2>
+            <!-- Titre -->
+            <div class="text-center mb-5">
+                <h1 class="titre-categorie fw-bold h2">
+                    {{ categorie.nom }}
+                </h1>
+                <hr class="w-25 mx-auto border-success" style="border-width: 3px;">
+                <h2 class="h6 text-muted text-uppercase">
+                    Sommaire des documents
+                </h2>
+            </div>
 
             {% if documents %}
-            <ul class="liste-documents">
+            <ul class="liste-documents list-unstyled">
                 {% for doc in documents %}
-                <li>
-                    <h3><strong>{{ doc.titre }}</strong></h3>
-                    <a href="{{ url_for('uploaded_file', filename=doc.fichier_nom) }}" target="_blank">📄 Afficher le document</a>
+                <li class="card mb-3 border-0 shadow-sm bg-light">
+                    <div class="card-body d-flex flex-column flex-sm-row
+                                justify-content-between align-items-start align-items-sm-center p-3">
+
+                        <div class="d-flex align-items-center mb-3 mb-sm-0
+                                    text-truncate me-sm-3 w-100">
+                            <i class="fas fa-file-alt text-success me-2 fa-lg"></i>
+                            <h3 class="h6 mb-0 text-dark text-truncate">
+                                <strong>{{ doc.titre }}</strong>
+                            </h3>
+                        </div>
+
+                        <a href="{{ url_for('documents.uploaded_file', filename=doc.fichier_nom) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-success rounded-pill shadow-sm
+                                  d-flex align-items-center justify-content-center">
+                            Afficher
+                        </a>
+
+                    </div>
                 </li>
                 {% endfor %}
             </ul>
             {% else %}
-                <p class="message-vide">Aucun document disponible dans cette catégorie.</p>
+                <div class="alert alert-light text-center py-5 shadow-sm rounded border">
+                    <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                    <p class="message-vide mb-0 text-muted">
+                        Aucun document disponible dans cette catégorie pour le moment.
+                    </p>
+                </div>
             {% endif %}
+
         </div>
     </div>
-
-</body>
-</html>
+</div>
+{% endblock %}

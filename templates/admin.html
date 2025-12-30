@@ -1,101 +1,367 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Administration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page-admin">
+{% extends "base.html" %}
 
-    <div class="admin-container">
-        <div class="navigation-admin">
-            <a href="{{ url_for('index') }}" class="btn-retour">← Retour à l'accueil</a>
-            {% if session.get('is_admin') %}
-                <span>Connecté : {{ session.username }} | 
-                    <a href="{{ url_for('logout') }}">Déconnexion</a>
-                </span>
-            {% else %}
-                <a href="{{ url_for('login') }}">Connexion administrateur</a>
-            {% endif %}
+{% block title %}Administration - Agriculture Numérique{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-3">
+            <i class="bi bi-speedometer2"></i> Tableau de bord administrateur
+        </h1>
+    </div>
+</div>
+
+<!-- Statistiques -->
+{% if stats %}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.total_documents }}</h3>
+                <p class="mb-0"><i class="bi bi-file-earmark-text"></i> Documents</p>
+            </div>
         </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.total_categories }}</h3>
+                <p class="mb-0"><i class="bi bi-folder"></i> Catégories</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.total_users }}</h3>
+                <p class="mb-0"><i class="bi bi-people"></i> Utilisateurs</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h3>{{ stats.documents_recents }}</h3>
+                <p class="mb-0"><i class="bi bi-clock-history"></i> Cette semaine</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
-        <h1>📁 Interface d'administration</h1>
-        <p>Gérez ici vos catégories et vos documents de la base.</p>
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button">
+            <i class="bi bi-folder"></i> Catégories
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button">
+            <i class="bi bi-file-earmark-text"></i> Documents
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button">
+            <i class="bi bi-people"></i> Utilisateurs
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button">
+            <i class="bi bi-gear"></i> Configuration
+        </button>
+    </li>
+</ul>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert-message">
-                    {% for msg in messages %}
-                        <p>{{ msg }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <hr>
-
-        <h2>📂 Catégories & Documents</h2>
-        {% for cat in categories %}
-            <div class="bloc-categorie">
-                <h3>{{ cat.nom }}</h3>
-
-                {% if cat.documents %}
-                    <ul class="liste-docs">
-                        {% for doc in cat.documents %}
-                            <li>
-                                📄 <strong>{{ doc.titre }}</strong>
-                                <a href="{{ url_for('uploaded_file', filename=doc.fichier_nom) }}" target="_blank">[Voir]</a>
-                                <form method="POST" action="{{ url_for('delete_document', id=doc.id) }}" class="inline-form" onsubmit="return confirm('Supprimer ce document ?')">
-                                    <button type="submit" class="btn-supprimer">Supprimer</button>
-                                </form>
-                                <a href="{{ url_for('edit_document', id=doc.id) }}" class="btn-modifier">Modifier</a>
-
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="texte-vide">Aucun document dans cette catégorie.</p>
-                {% endif %}
-                <form method="POST" action="{{ url_for('edit_category', id=cat.id) }}">
-                    <input type="text" name="nom" value="{{ cat.nom }}" required>
-                    <button type="submit">Modifier</button>
-                </form>
-                <form method="POST" action="{{ url_for('delete_category', id=cat.id) }}" onsubmit="return confirm('Supprimer cette catégorie et tous ses documents ?')">
-                    <button type="submit" class="btn-supprimer-cat">🗑️ Supprimer la catégorie</button>
+<div class="tab-content" id="adminTabsContent">
+    
+    <!-- ONGLET CATEGORIES -->
+    <div class="tab-pane fade show active" id="categories" role="tabpanel">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Ajouter une catégorie</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.add_category') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" name="nom" class="form-control" placeholder="Nom de la catégorie" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="description" class="form-control" placeholder="Description (optionnel)">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-plus"></i> Ajouter
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
-        {% else %}
-            <p class="texte-vide">Aucune catégorie définie.</p>
-        {% endfor %}
+        </div>
 
-        <hr>
-
-        <h2>➕ Ajouter une catégorie</h2>
-        <form method="POST" action="{{ url_for('add_category') }}" class="form-admin">
-            <input type="text" name="nom" placeholder="Nom de la catégorie" required>
-            <button type="submit">Ajouter</button>
-        </form>
-
-
-        <h2>📤 Ajouter un document</h2>
-        <p>Formats acceptés : PDF, DOC, DOCX</p>
-        <form method="POST" action="{{ url_for('add_document') }}" enctype="multipart/form-data" class="form-admin">
-            <input type="text" name="titre" placeholder="Titre du document" ><br>
-            <select name="categorie_id" required>
-                {% for cat in categories %}
-                    <option value="{{ cat.id }}">{{ cat.nom }}</option>
-                {% endfor %}
-            </select><br>
-            <input type="file" name="files[]" accept=".pdf,.doc,.docx" multiple required><br>
-            <button type="submit">Ajouter</button>
-        </form>
-        <hr>
-
-
-        <form method="POST" action="{{ url_for('reset_db') }}" onsubmit="return confirm('⚠️ Cette action va supprimer toutes les données !')">
-            <button type="submit" class="btn-reset">🔄 Réinitialiser la base de données</button>
-        </form>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-list"></i> Liste des catégories</h5>
+            </div>
+            <div class="card-body">
+                {% if categories %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Description</th>
+                                <th>Documents</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for categorie in categories %}
+                            <tr>
+                                <td><strong>{{ categorie.nom }}</strong></td>
+                                <td>{{ categorie.description or '-' }}</td>
+                                <td><span class="badge bg-primary">{{ categorie.nb_documents }}</span></td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('admin.edit_category', id=categorie.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('admin.delete_category', id=categorie.id) }}" style="display:inline;" onsubmit="return confirm('Supprimer cette catégorie et tous ses documents ?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Aucune catégorie.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-</body>
-</html>
+    <!-- ONGLET DOCUMENTS -->
+    <div class="tab-pane fade" id="documents" role="tabpanel">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-upload"></i> Ajouter un document</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.add_document') }}" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Titre</label>
+                            <input type="text" name="titre" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Catégorie</label>
+                            <select name="categorie_id" class="form-select" required>
+                                <option value="">Sélectionner...</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.id }}">{{ cat.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description (optionnel)</label>
+                        <textarea name="description" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fichiers (PDF, DOC, DOCX, TXT, ODT)</label>
+                        <input type="file" name="files[]" class="form-control" multiple required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-upload"></i> Uploader
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-list"></i> Documents récents</h5>
+            </div>
+            <div class="card-body">
+                {% if documents %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Catégorie</th>
+                                <th>Date</th>
+                                <th>Vues</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in documents %}
+                            <tr>
+                                <td>
+                                    <i class="bi bi-file-earmark-pdf text-danger"></i>
+                                    {{ doc.titre }}
+                                </td>
+                                <td><span class="badge bg-secondary">{{ doc.categorie.nom }}</span></td>
+                                <td>{{ doc.date_ajout.strftime('%d/%m/%Y') if doc.date_ajout else '-' }}</td>
+                                <td>{{ doc.nombre_vues }}</td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('admin.edit_document', id=doc.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('admin.delete_document', id=doc.id) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce document ?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Aucun document.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ONGLET UTILISATEURS -->
+    <div class="tab-pane fade" id="users" role="tabpanel">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-person-plus"></i> Créer un utilisateur</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.create_admin_user') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" name="username" class="form-control" placeholder="Nom d'utilisateur" required>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="email" name="email" class="form-control" placeholder="Email (optionnel)">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="password" name="password" class="form-control" placeholder="Mot de passe" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin">
+                            <label class="form-check-label" for="is_admin">
+                                Administrateur
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info">
+                        <i class="bi bi-person-plus"></i> Créer
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Liste des utilisateurs</h5>
+            </div>
+            <div class="card-body">
+                {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Utilisateur</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Dernière connexion</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td><strong>{{ user.username }}</strong></td>
+                                <td>{{ user.email or '-' }}</td>
+                                <td>
+                                    {% if user.is_admin %}
+                                    <span class="badge bg-danger">Admin</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Utilisateur</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.derniere_connexion.strftime('%d/%m/%Y %H:%M') if user.derniere_connexion else 'Jamais' }}</td>
+                                <td class="text-end">
+                                    {% if user.id != user_id %}
+                                    <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <span class="text-muted">(Vous)</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Aucun utilisateur.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ONGLET CONFIGURATION -->
+    <div class="tab-pane fade" id="config" role="tabpanel">
+        <div class="card mb-4">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="bi bi-megaphone"></i> Message défilant</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.update_announcement') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <textarea name="custom_message" class="form-control" rows="2" placeholder="Votre message personnalisé...">{{ config_message }}</textarea>
+                        <small class="text-muted">Ce message s'affichera dans la bannière défilante en haut du site.</small>
+                    </div>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-save"></i> Mettre à jour
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Zone dangereuse</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-danger"><strong>⚠️ Attention :</strong> Cette action supprimera TOUTES les données de la base de données !</p>
+                <form method="POST" action="{{ url_for('admin.reset_db') }}" onsubmit="return confirm('ATTENTION ! Toutes les données seront supprimées. Tapez RESET dans le champ pour confirmer.');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="input-group mb-3">
+                        <input type="text" name="confirmation" class="form-control" placeholder="Tapez RESET pour confirmer" required>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Réinitialiser la base de données
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

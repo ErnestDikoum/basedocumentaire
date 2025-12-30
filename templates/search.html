@@ -1,32 +1,60 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Résultats</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page-resultats">
+{% extends "base.html" %}
 
-    <div class="resultats-container">
-        <h1>Résultats de la recherche</h1>
+{% block title %}Résultats de recherche - Base Documentaire{% endblock %}
+
+{% block body_class %}page-resultats{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center px-2">
+    <div class="resultats-container w-100">
+
+        <h1 class="h3 mb-4 text-center text-md-start">
+            Résultats de la recherche
+        </h1>
 
         {% if results %}
-            <ul class="liste-resultats">
+            <ul class="list-unstyled">
                 {% for doc in results %}
-                    <li>
-                        <strong>{{ doc.titre }}</strong><br>
-                        <a href="{{ url_for('uploaded_file', filename=doc.fichier_nom) }}" target="_blank">📄 Afficher le document</a>
+                    <li class="mb-3 p-3 border-bottom d-flex flex-column flex-md-row 
+                               justify-content-md-between align-items-md-center 
+                               bg-white rounded shadow-sm">
+
+                        <div class="mb-2 mb-md-0 text-truncate w-100">
+                            <h5 class="mb-1 text-dark">
+                                <i class="fas fa-file-alt text-success me-2"></i>
+                                <strong>{{ doc.titre }}</strong>
+                            </h5>
+                        </div>
+
+                        <div class="mt-2 mt-md-0">
+                            <a href="{{ url_for('documents.uploaded_file', filename=doc.fichier_nom) }}"
+                               target="_blank"
+                               class="btn btn-sm btn-outline-success rounded-pill">
+                                <i class="fas fa-eye me-1"></i>
+                                Voir le document
+                            </a>
+                        </div>
+
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="message-vide">❌ Aucun document trouvé pour votre recherche.</p>
+            <div class="alert alert-warning py-4 text-center shadow-sm">
+                <p class="message-vide mb-0">
+                    <i class="fas fa-search-minus fa-2x mb-2 d-block"></i>
+                    Aucun document trouvé pour votre recherche.
+                </p>
+            </div>
         {% endif %}
 
-        <div class="retour-accueil">
-            <a href="{{ url_for('index') }}" class="btn-retour">← Retour à l'accueil</a>
+        <div class="text-center text-md-start mt-4">
+            <a href="{{ url_for('documents.index') }}"
+               class="btn btn-sm btn-outline-secondary px-4">
+                <i class="fas fa-home me-1"></i>
+                Retour à l'accueil
+            </a>
         </div>
-    </div>
 
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}
